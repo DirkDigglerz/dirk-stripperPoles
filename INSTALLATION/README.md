@@ -1,0 +1,1 @@
+Make sure you have markedbills or whatever item currency you use in your server as a non-unique metadata-less item if you wish to use it 
