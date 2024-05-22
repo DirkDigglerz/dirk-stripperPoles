@@ -1,4 +1,5 @@
 Config = {
+  usingTarget          = true, 
   returnAccount   = "cash",
   spamControl     = 5, --## How many seconds between each throw
   allowedControls = {},
@@ -7,35 +8,29 @@ Config = {
   stripperPoles = {
     ['vanillaUnicorn-fiveDev'] = {
       danceZone = {
-        vector3(108.63925170898,-1296.3497314453,28.406003952026),
-        vector3(109.68885040283,-1295.4644775391,28.4196434021),
-        vector3(110.66255950928,-1293.8630371094,28.300262451172),
-        vector3(112.62454986572,-1294.0456542969,28.300268173218),
-        vector3(114.93127441406,-1292.7944335938,28.300273895264),
-        vector3(115.46892547607,-1290.9020996094,28.274715423584),
-        vector3(117.73882293701,-1291.0866699219,28.300298690796),
-        vector3(119.86264801025,-1289.83984375,28.300298690796),
-        vector3(120.41892242432,-1288.0799560547,28.288501739502),
-        vector3(121.43914794922,-1287.7395019531,28.300298690796),
-        vector3(123.44960021973,-1288.515625,28.300298690796),
-        vector3(123.51182556152,-1290.5047607422,28.300298690796),
-        vector3(122.09657287598,-1291.4202880859,28.300298690796),
-        vector3(120.87956237793,-1291.0543212891,28.297218322754),
-        vector3(118.81465911865,-1292.1025390625,28.416463851929),
-        vector3(118.08997344971,-1293.5617675781,28.300298690796),
-        vector3(117.40944671631,-1294.3802490234,28.300298690796),
-        vector3(115.41554260254,-1294.2053222656,28.181755065918),
-        vector3(113.52877044678,-1295.4104003906,28.223384857178),
-        vector3(113.14813232422,-1296.6990966797,28.225387573242),
-        vector3(112.02349853516,-1297.4631347656,28.294078826904),
-        vector3(110.37642669678,-1297.1168212891,28.299425125122),
-        vector3(109.55384063721,-1297.5549316406,28.299430847168),   
+        vector3(99.28018951416,-1289.5327148438,27.346347808838),
+        vector3(102.06481170654,-1288.26953125,27.260959625244),
+        vector3(103.8480682373,-1288.65625,27.260959625244),
+        vector3(104.71467590332,-1289.3911132812,27.321521759033),
+        vector3(109.72971343994,-1286.4954833984,27.260959625244),
+        vector3(109.591796875,-1285.6778564453,27.286987304688),
+        vector3(112.25367736816,-1283.9031982422,27.343229293823),
+        vector3(113.21440887451,-1283.9519042969,27.345188140869),
+        vector3(115.66416168213,-1288.2615966797,27.307500839233),
+        vector3(115.44802093506,-1288.8719482422,27.307065963745),
+        vector3(113.39487457275,-1290.1434326172,27.260959625244),
+        vector3(112.5267791748,-1290.5037841797,27.260959625244),
+        vector3(111.64040374756,-1290.10546875,27.260959625244),
+        vector3(106.89671325684,-1292.8767089844,27.260959625244),
+        vector3(106.97664642334,-1294.7160644531,27.260959625244),
+        vector3(105.85494995117,-1296.2866210938,27.260959625244),
+        vector3(104.28559875488,-1297.265625,27.260959625244),   
       },
 
       denomination = 5000,       --## The denomination of the money that is thrown at a time e.g 20xCash
-      currency     = {type = 'item',    name = 'markedbills'},--## The currency that is thrown --## This will not search for metadata just a non-unique item
+      currency     = {type = 'item', name = 'black_money'},--## The currency that is thrown --## This will not search for metadata just a non-unique item
       retCurrency  = {type = 'account', name = "cash"},  --## The currency returned to dancers and the player
-      jobs         = {vu = 0}, --## The jobs that can use this pole
+      jobs         = {unemployed = 0}, --## The jobs that can use this pole
       limit        = 999999999,    --## How much can a player splash at this.
       toSociety    = "vu",     --## The society to pay the money to if you choose to do so 
       shares = {               --## The shares of the money that is thrown
@@ -44,13 +39,10 @@ Config = {
         toSociety  = 5, 
       },
 
-      leanSpots = {           --## The spots where you can lean and throw that dollah
-        ["rightSide"]    = vector4(123.01, -1291.52, 28.44, 31.68),
-        ['middle']       = vector4(120.66, -1287.43, 28.44, 201.28),
-        ['leftSide']     = vector4(115.53, -1290.34, 28.44, 195.14),
-        ['farRight']     = vector4(117.97, -1294.47, 28.44, 33.35), 
-        ['furtherRight'] = vector4(112.52, -1297.55, 28.44, 19.87), 
-        ['nextOne']      = vector4(110.29, -1293.54, 28.44, 212.04),
+      leanSpots = {           --## The spots where you can lean and throw that dollah      
+        ["rightSide"]    = vector4(110.85, -1284.3, 28.26, 209.7),
+        ['middle']       = vector4(114.91, -1286.08, 28.26, 114.6),
+        ['leftSide']     = vector4(114.54, -1289.86, 28.26, 37.87),
       },
     },    
   },

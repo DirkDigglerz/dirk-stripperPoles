@@ -4,7 +4,7 @@ local addToSociety = function(society, amount)
   end
 
   if Settings.Framework == 'qb-core' then 
-    exports['qb-management']:AddMoney(society, amount)
+    -- exports['qb-management']:AddMoney(society, amount)
   elseif Settings.Framework == 'es_extended' then 
 
   end  

@@ -10,13 +10,13 @@ local makeItRain = function()
   local lib, anim = 'anim@mp_player_intcelebrationfemale@raining_cash', 'raining_cash' 
   Wait(900)
   while not HasAnimDictLoaded(lib) do RequestAnimDict(lib) Wait(0) end
-  TaskPlayAnim(PlayerPedId(), lib, anim, 8.0 , -1 , -1 , 0 , 0 , false , false , false);
+  TaskPlayAnim(cache.ped, lib, anim, 8.0 , -1 , -1 , 0 , 0 , false , false , false);
   Wait(1000)
-  local netID = NetworkGetNetworkIdFromEntity(PlayerPedId())
-  local pos   = GetEntityCoords(PlayerPedId())
+  local netID = NetworkGetNetworkIdFromEntity(cache.ped)
+  local pos   = GetEntityCoords(cache.ped)
   TriggerServerEvent("dirk-stripperPoles:syncMoneyEffects", pos, netID)
   UseParticleFxAssetNextCall("core")
-  local fx = StartParticleFxNonLoopedOnEntity("ent_brk_banknotes", PlayerPedId(), 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, false, false, false)  
+  local fx = StartParticleFxNonLoopedOnEntity("ent_brk_banknotes", cache.ped, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, false, false, false)  
   Wait(2000)
   DetachEntity(cash, 1, 1)
   DeleteEntity(cash)
@@ -24,26 +24,29 @@ local makeItRain = function()
 end
 
 local leanAnimation = function(pos, setPos)
+  if not occupying then return false; end
   if setPos then 
-    TaskGoStraightToCoord(PlayerPedId(), pos.x, pos.y, pos.z, 1.0, 1000, 0.0, 0.0)
-    while not IsEntityAtCoord(PlayerPedId(), pos.x, pos.y, pos.z, 0.5, 0.5, 0.5, false, true, 0) do Wait(0); end
+    TaskGoStraightToCoord(cache.ped, pos.x, pos.y, pos.z, 1.0, 1000, 0.0, 0.0)
+    while not IsEntityAtCoord(cache.ped, pos.x, pos.y, pos.z, 0.5, 0.5, 0.5, false, true, 0) do Wait(0); end
     Wait(1000)
-    SetEntityHeading(PlayerPedId(), pos.w)
-    FreezeEntityPosition(PlayerPedId(), true)
+    SetEntityHeading(cache.ped, pos.w)
+    FreezeEntityPosition(cache.ped, true)
   end
 
 
   local lib, anim = Config.leanAnim.lib, Config.leanAnim.anim
   while not HasAnimDictLoaded(lib) do RequestAnimDict(lib) Wait(0) end
-  TaskPlayAnim(PlayerPedId(), lib, anim, 8.0 , -1 , -1 , 0 , 0 , false , false , false);
+  TaskPlayAnim(cache.ped, lib, anim, 8.0 , -1 , -1 , 0 , 0 , false , false , false);
 end
 
 local leaveLean = function()
-  ClearPedTasks(PlayerPedId())
-  FreezeEntityPosition(PlayerPedId(), false)
+
+
   TriggerServerEvent("dirk-stripperPoles:leanspot:sync", occupying, {
     occupied = false
   })
+  ClearPedTasks(cache.ped)
+  FreezeEntityPosition(cache.ped, false)
   occupying = false
 end
 
@@ -135,23 +138,51 @@ onReady(function()
         limit        = pole.limit
       })
     end
+
+    if Config.usingTarget then 
+      for k,v in pairs(pole.leanSpots) do 
+        Core.Target.AddBoxZone(string.format("leanSpot:%s:%s", name, k), {
+          Length = 2.0,
+          Width  = 2.0,
+          Height  = 1.0,
+          Position = v,
+          Distance = 1.5,
+          Options = {
+            {
+              label = "Lean",
+              icon = "fas fa-money-bill-wave",
+              canInteract = function()
+                print('occupied = ', leanspots[k].occupied)
+                return not leanspots[k].occupied
+              end,
+
+              action = function()
+                leanspots[k].occupy()
+              end
+            }
+          }
+        })
+      end 
+    end
   end
 
   while true do 
     local wait_time = 1000 
-    local mypos = GetEntityCoords(PlayerPedId())
+    local mypos = GetEntityCoords(cache.ped)
 
     if not occupying then 
-      for id, data in pairs(leanspots) do 
-        if not data.occupied then 
-          local dist = #(mypos - data.pos.xyz)
-          if dist < 3.0 then 
-            wait_time = 0 
-            data.draw()
-            if dist < 1.0 then 
-              Core.UI.ShowHelpNotification("Press ~INPUT_CONTEXT~ to start leaning")
-              if IsControlJustPressed(0, 38) then 
-                data.occupy()
+      if not Config.usingTarget then 
+        for id, data in pairs(leanspots) do 
+          if not data.occupied then 
+            local dist = #(mypos - data.pos.xyz)
+            if dist < 3.0 then 
+              wait_time = 0 
+              data.draw()
+              if dist < 1.0 then 
+                Core.UI.ShowHelpNotification("Press ~INPUT_CONTEXT~ to start leaning")
+                if IsControlJustPressed(0, 38) then 
+                  data.occupy()
+                end
               end
             end
           end
@@ -175,7 +206,7 @@ onReady(function()
       
 
       if not makingItRain then 
-        local ply = PlayerPedId()
+        local ply = cache.ped
         local lib, anim = Config.leanAnim.lib, Config.leanAnim.anim
         local playingAnim = IsEntityPlayingAnim(ply, lib,anim,3) 
         if not playingAnim then 
@@ -197,6 +228,6 @@ end)
 
 
 RegisterCommand('unfreeze', function()
-  local ply  = PlayerPedId()
+  local ply  = cache.ped
   FreezeEntityPosition(ply, false)
 end)

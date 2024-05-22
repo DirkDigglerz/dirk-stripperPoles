@@ -8,6 +8,7 @@ description 'Stripper Pole System (CUSTOM)'
 version '1.0.0' 
  
 shared_script{ 
+  '@ox_lib/init.lua',
   'usersettings/config.lua', 
   'usersettings/labels.lua', 
   'src/shared/utils.lua', 
